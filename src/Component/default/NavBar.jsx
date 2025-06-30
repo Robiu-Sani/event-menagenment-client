@@ -1,0 +1,121 @@
+import { Home, CalendarPlus, Calendar, LogIn } from "lucide-react";
+import { Link } from "react-router-dom";
+
+const NavBar = () => {
+  return (
+    <nav className="bg-white shadow-md sticky top-0 z-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          {/* Logo and website name */}
+          <div className="flex items-center">
+            <Link to="/" className="flex-shrink-0 flex items-center">
+              <img className="h-8 w-8" src="./logo.png" alt="Gather Up Logo" />
+              <span className="ml-2 text-xl font-bold text-indigo-600">
+                Gather Up
+              </span>
+            </Link>
+          </div>
+
+          {/* Main navigation links */}
+          <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
+            <Link
+              to="/"
+              className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+            >
+              <Home className="h-4 w-4 mr-1" />
+              Home
+            </Link>
+            <Link
+              to="/events"
+              className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+            >
+              <Calendar className="h-4 w-4 mr-1" />
+              Events
+            </Link>
+            <Link
+              to="/add-event"
+              className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+            >
+              <CalendarPlus className="h-4 w-4 mr-1" />
+              Add Event
+            </Link>
+          </div>
+
+          {/* Sign In button */}
+          <div className="flex items-center">
+            <Link
+              to="/login"
+              className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <LogIn className="h-4 w-4 mr-1" />
+              Sign In
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu button (hidden on larger screens) */}
+      <div className="md:hidden flex justify-between items-center px-4 py-2">
+        <button
+          type="button"
+          className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          <span className="sr-only">Open main menu</span>
+          {/* Hamburger icon */}
+          <svg
+            className="block h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+        <Link
+          to="/login"
+          className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <LogIn className="h-4 w-4 mr-1" />
+          Sign In
+        </Link>
+      </div>
+
+      {/* Mobile menu (hidden by default) */}
+      <div className="md:hidden hidden" id="mobile-menu">
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <Link
+            to="/"
+            className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium flex items-center"
+          >
+            <Home className="h-4 w-4 mr-2" />
+            Home
+          </Link>
+          <Link
+            to="/events"
+            className="text-gray-700 hover:text-indigo-600  px-3 py-2 rounded-md text-base font-medium flex items-center"
+          >
+            <Calendar className="h-4 w-4 mr-2" />
+            Events
+          </Link>
+          <Link
+            to="/add-event"
+            className="text-gray-700 hover:text-indigo-600  px-3 py-2 rounded-md text-base font-medium flex items-center"
+          >
+            <CalendarPlus className="h-4 w-4 mr-2" />
+            Add Event
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default NavBar;
