@@ -19,7 +19,7 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://task-lime-one.vercel.app/api/v1/login",
+        "http://localhost:5000/api/v1/login",
         {
           email: data.email,
           password: data.password,
@@ -30,6 +30,8 @@ export default function LoginPage() {
           },
         }
       );
+
+      console.log(response.data);
 
       if (response.data.success) {
         localStorage.setItem("accessToken", response.data.accessToken);

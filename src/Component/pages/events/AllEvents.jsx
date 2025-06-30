@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 import EventCard from "./EventCard";
+import toast from "react-hot-toast";
 
 export default function AllEvents() {
   const [events, setEvents] = useState([]);
@@ -71,7 +72,7 @@ export default function AllEvents() {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.put(
-        `http://localhost:5000/api/v1/events/${eventId}/join`,
+        `http://localhost:5000/api/v1/event/${eventId}/join`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -82,7 +83,10 @@ export default function AllEvents() {
         )
       );
     } catch (err) {
-      setError("Failed to join event");
+      console.log(err);
+      toast.error(
+        err.response?.data?.message || "Error joining event. Please try again."
+      );
     }
   };
 
@@ -104,9 +108,6 @@ export default function AllEvents() {
   };
 
   // Loading state
-  if (loading) {
-    return <EventListSkeleton />;
-  }
 
   // Error state
   if (error) {
@@ -216,6 +217,7 @@ export default function AllEvents() {
         </button>
       </div>
 
+      {loading ? <EventListSkeleton /> : null}
       {/* Events List */}
       {events.length === 0 ? (
         <div className="text-center py-12">
