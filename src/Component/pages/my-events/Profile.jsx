@@ -113,60 +113,63 @@ export default function Profile() {
       )}
 
       {/* New Banner Header */}
-      <div className="relative container mx-auto pt-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl overflow-hidden shadow-lg">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
-        </div>
+      <div className="p-4 pb-0">
+        <div className="relative container mx-auto pt-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl overflow-hidden shadow-lg">
+          {/* Background pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+          </div>
 
-        <div className="relative z-10 p-8 md:p-12">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
-            {/* Profile Image */}
-            <div className="relative group">
-              <img
-                src={userData.photoUrl || "https://avatar.vercel.sh/default"}
-                alt="Profile"
-                className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white/80 shadow-xl object-cover"
-              />
-              <button
-                onClick={() => setIsEditModalOpen(true)}
-                className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-all"
-              >
-                <Edit className="h-5 w-5 text-indigo-600" />
-              </button>
-            </div>
+          <div className="relative z-10 p-8 md:p-12">
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
+              {/* Profile Image */}
+              <div className="relative group">
+                <img
+                  src={userData.photoUrl || "https://avatar.vercel.sh/default"}
+                  alt="Profile"
+                  className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white/80 shadow-xl object-cover"
+                />
+                {/* hidden profile edit part  */}
+                <button
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="absolute hidden bottom-0 right-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-all"
+                >
+                  <Edit className="h-5 w-5 text-indigo-600" />
+                </button>
+              </div>
 
-            {/* Profile Info */}
-            <div className="text-white">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                {userData.name}
-              </h1>
-              <p className="text-lg md:text-xl text-indigo-100 mb-4">
-                {userData.email}
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm">
-                  <Shield className="h-4 w-4 mr-1" />
-                  {userData.role}
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  Joined {new Date(userData.createdAt).toLocaleDateString()}
-                </span>
+              {/* Profile Info */}
+              <div className="text-white">
+                <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                  {userData.name}
+                </h1>
+                <p className="text-lg md:text-xl text-indigo-100 mb-4">
+                  {userData.email}
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm">
+                    <Shield className="h-4 w-4 mr-1" />
+                    {userData.role}
+                  </span>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm">
+                    <Calendar className="h-4 w-4 mr-1" />
+                    Joined {new Date(userData.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Decorative elements */}
-        <div className="absolute right-0 top-0 h-full w-1/3">
-          <div className="absolute -right-20 -top-20 w-64 h-64 bg-purple-400 rounded-full opacity-20"></div>
-          <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-indigo-400 rounded-full opacity-20"></div>
+          {/* Decorative elements */}
+          <div className="absolute right-0 top-0 h-full w-1/3">
+            <div className="absolute -right-20 -top-20 w-64 h-64 bg-purple-400 rounded-full opacity-20"></div>
+            <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-indigo-400 rounded-full opacity-20"></div>
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 md:px-6 py-8">
+      <main className="container mx-auto px-4  py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Account Card */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden lg:col-span-2">
@@ -241,7 +244,8 @@ export default function Profile() {
                 </div>
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-4">
+              {/* there hidden edit part  */}
+              <div className="mt-8 hidden flex-wrap gap-4">
                 <button
                   onClick={() => setIsEditModalOpen(true)}
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"

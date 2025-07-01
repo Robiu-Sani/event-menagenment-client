@@ -109,7 +109,7 @@ const NavBar = () => {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="p-2 border text-sm font-bold text-center bg-red-100 rounded-md"
+                    className="p-2 border text-sm font-bold text-center bg-red-500 text-white rounded-md"
                   >
                     LogOut
                   </button>
@@ -184,7 +184,7 @@ const NavBar = () => {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="p-2 border text-sm font-bold text-center bg-red-100 rounded-md"
+                  className="p-2 border text-sm font-bold text-center bg-red-500 text-white rounded-md"
                 >
                   LogOut
                 </button>

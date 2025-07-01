@@ -9,6 +9,7 @@ import RegisterPage from "../pages/register/RegisterPage";
 import MyEvents from "../pages/my-events/MyEvents";
 import Profile from "../pages/my-events/Profile";
 import EditEvents from "../pages/my-events/EditEvents";
+import Private from "./Private";
 
 export const router = createBrowserRouter([
   {
@@ -30,23 +31,43 @@ export const router = createBrowserRouter([
       },
       {
         path: "/events",
-        element: <EventPage />,
+        element: (
+          <Private>
+            <EventPage />
+          </Private>
+        ),
       },
       {
         path: "/add-event",
-        element: <AddEventPage />,
+        element: (
+          <Private>
+            <AddEventPage />
+          </Private>
+        ),
       },
       {
         path: "/my-events",
-        element: <MyEvents />,
+        element: (
+          <Private>
+            <MyEvents />
+          </Private>
+        ),
       },
       {
         path: "/edit-event/:id",
-        element: <EditEvents />,
+        element: (
+          <Private>
+            <EditEvents />
+          </Private>
+        ),
       },
       {
         path: "/profile",
-        element: <Profile />,
+        element: (
+          <Private>
+            <Profile />
+          </Private>
+        ),
       },
     ],
   },

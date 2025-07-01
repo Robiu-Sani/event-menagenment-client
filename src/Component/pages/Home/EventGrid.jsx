@@ -32,7 +32,7 @@ const EventGrid = () => {
       setLoadingStates((prev) => ({ ...prev, [eventId]: true }));
 
       const response = await axios.put(
-        `/api/v1/event/${eventId}/join`,
+        `${import.meta.env.VITE_SERVER}/api/v1/event/${eventId}/join`,
         {},
         {
           headers: {

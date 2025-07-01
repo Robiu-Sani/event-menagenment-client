@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { Lock, Mail, Loader2, Eye, EyeOff } from "lucide-react";
+import useGetUserData from "../../default/useGetUserData";
 
 export default function LoginPage() {
   const {
@@ -14,6 +15,8 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userData } = useGetUserData();
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -36,7 +39,7 @@ export default function LoginPage() {
       if (response.data.success) {
         localStorage.setItem("accessToken", response.data.accessToken);
         toast.success("Login successful!");
-        navigate("/profile");
+        navigate(location.state ? location.state : "/profile");
         window.location.reload();
       }
     } catch (error) {
@@ -51,6 +54,10 @@ export default function LoginPage() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  if (userData) {
+    return <Navigate to={`/`} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -174,7 +181,9 @@ export default function LoginPage() {
                 </label>
               </div>
 
-              <div className="text-sm">
+              {/* forget password is hidden is here  */}
+
+              <div className="text-sm hidden">
                 <Link
                   to="/forgot-password"
                   className="font-medium text-indigo-600 hover:text-indigo-500"

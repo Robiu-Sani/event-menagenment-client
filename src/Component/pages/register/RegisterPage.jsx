@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -14,6 +14,7 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import useGetUserData from "../../default/useGetUserData";
 
 export default function RegisterPage() {
   const {
@@ -32,6 +33,8 @@ export default function RegisterPage() {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userData } = useGetUserData();
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -123,7 +126,7 @@ export default function RegisterPage() {
       if (response.data.success) {
         localStorage.setItem("accessToken", response.data.accessToken);
         toast.success("Registration successful! You are now logged in.");
-        navigate("/events");
+        navigate(location.state ? location.state : "/profile");
         window.location.reload();
       }
     } catch (error) {
@@ -135,6 +138,10 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
+
+  if (userData) {
+    return <Navigate to={`/`} />;
+  }
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () =>

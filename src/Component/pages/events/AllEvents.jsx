@@ -78,6 +78,7 @@ export default function AllEvents() {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      toast.success("You have join success fully");
       // Optimistic UI update
       setEvents(
         events.map((e) =>
