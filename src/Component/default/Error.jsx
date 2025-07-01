@@ -10,7 +10,7 @@ export default function Error() {
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <Link to="/" className="flex items-center">
-            <img className="h-10 w-10" src="./logo.png" alt="Gather Up Logo" />
+            <img className="h-10 w-10" src="/logo.png" alt="Gather Up Logo" />
             <span className="ml-2 text-2xl font-bold text-indigo-600">
               Gather Up
             </span>

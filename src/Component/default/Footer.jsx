@@ -7,6 +7,7 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -16,7 +17,7 @@ const Footer = () => {
           {/* About Section */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <img className="h-8 w-8" src="./logo.png" alt="Gather Up Logo" />
+              <img className="h-8 w-8" src="/logo.png" alt="Gather Up Logo" />
               <span className="ml-2 text-xl font-bold text-white">
                 Gather Up
               </span>
@@ -58,29 +59,41 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Quick Links</h3>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link to={`/`} className="hover:text-white transition-colors">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link
+                  to={`/events`}
+                  className="hover:text-white transition-colors"
+                >
                   Events
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link
+                  to={`/add-event`}
+                  className="hover:text-white transition-colors"
+                >
                   Add Event
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link
+                  to={`/my-events`}
+                  className="hover:text-white transition-colors"
+                >
                   My Events
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link
+                  to={`/login`}
+                  className="hover:text-white transition-colors"
+                >
                   Sign In
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

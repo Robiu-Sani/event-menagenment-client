@@ -39,6 +39,7 @@ export default function RegisterPage() {
         localStorage.setItem("accessToken", response.data.accessToken);
         toast.success("Registration successful! You are now logged in.");
         navigate("/events");
+        window.location.reload();
       }
     } catch (error) {
       const errorMessage =

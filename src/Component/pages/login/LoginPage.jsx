@@ -37,6 +37,7 @@ export default function LoginPage() {
         localStorage.setItem("accessToken", response.data.accessToken);
         toast.success("Login successful!");
         navigate("/events");
+        window.location.reload();
       }
     } catch (error) {
       const errorMessage =
