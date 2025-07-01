@@ -24,7 +24,7 @@ export default function AddEventForm() {
       setIsLoading(true);
       const token = getAuthToken();
       const response = await axios.post(
-        "http://localhost:5000/api/v1/event",
+        `${import.meta.env.VITE_SERVER}/api/v1/event`,
         {
           ...data,
           attendeeCount: 0,

@@ -36,11 +36,14 @@ export default function Profile() {
 
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/v1/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER}/api/v1/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setUserData(response.data.data);
         setEditForm({
           name: response.data.data.name,

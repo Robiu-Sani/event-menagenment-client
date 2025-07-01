@@ -37,7 +37,7 @@ export default function EditEvents() {
         setIsFetching(true);
         const token = getAuthToken();
         const response = await axios.get(
-          `http://localhost:5000/api/v1/event/${id}`,
+          `${import.meta.env.VITE_SERVER}/api/v1/event/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -84,7 +84,7 @@ export default function EditEvents() {
       }
 
       const response = await axios.put(
-        `http://localhost:5000/api/v1/event/${id}`,
+        `${import.meta.env.VITE_SERVER}/api/v1/event/${id}`,
         changedData,
         {
           headers: {

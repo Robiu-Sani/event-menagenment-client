@@ -16,11 +16,14 @@ export default function useGetUserData() {
 
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:5000/api/v1/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER}/api/v1/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setUserData(response.data.data);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch user data");

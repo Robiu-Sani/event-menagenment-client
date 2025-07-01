@@ -5,6 +5,11 @@ export default function Context({ children }) {
   const [isSetupWork, setIsSetUpWork] = useState("hellow world");
   const [eventSearchItem, setEventSearchItem] = useState({});
   const [userData, setUserData] = useState({});
+  const [homeEvents, setHomeEvents] = useState([]);
+
+  const handleHomeEvents = (data) => {
+    setHomeEvents(data);
+  };
 
   const testing = (data) => {
     setIsSetUpWork(data);
@@ -25,6 +30,8 @@ export default function Context({ children }) {
     userData,
     handleEventSearchItem,
     eventSearchItem,
+    handleHomeEvents,
+    homeEvents,
   };
 
   return (

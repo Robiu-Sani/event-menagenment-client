@@ -19,7 +19,7 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/login",
+        `${import.meta.env.VITE_SERVER}/api/v1/login`,
         {
           email: data.email,
           password: data.password,
@@ -36,7 +36,7 @@ export default function LoginPage() {
       if (response.data.success) {
         localStorage.setItem("accessToken", response.data.accessToken);
         toast.success("Login successful!");
-        navigate("/events");
+        navigate("/profile");
         window.location.reload();
       }
     } catch (error) {

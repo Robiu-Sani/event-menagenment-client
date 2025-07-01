@@ -33,7 +33,9 @@ export default function AllEvents() {
         setLoading(true);
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `http://localhost:5000/api/v1/events?limit=${limit}&page=${page}`,
+          `${
+            import.meta.env.VITE_SERVER
+          }5000/api/v1/events?limit=${limit}&page=${page}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -65,9 +67,12 @@ export default function AllEvents() {
       }).then((result) => {
         if (result.isConfirmed) {
           const token = localStorage.getItem("accessToken");
-          axios.delete(`http://localhost:5000/api/v1/event/${eventId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          axios.delete(
+            `${import.meta.env.VITE_SERVER}/api/v1/event/${eventId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           setEvents(events.filter((event) => event._id !== eventId));
           toast.success("Event deleted successfully!");
 
@@ -88,7 +93,7 @@ export default function AllEvents() {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.put(
-        `http://localhost:5000/api/v1/events/${eventId}/join`,
+        `${import.meta.env.VITE_SERVER}/api/v1/events/${eventId}/join`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -23,8 +23,9 @@ const NavBar = () => {
       if (result.isConfirmed) {
         localStorage.removeItem("accessToken");
         refetch();
+        navigate("/");
         window.location.reload();
-        navigate("/login");
+
         Swal.fire({
           title: "Logged Out!",
           text: "You have been logged out successfully.",

@@ -49,7 +49,7 @@ export default function AllEvents() {
         const queryString = buildQueryString();
 
         const response = await axios.get(
-          `http://localhost:5000/api/v1/events?${queryString}`,
+          `${import.meta.env.VITE_SERVER}/api/v1/events?${queryString}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -74,7 +74,7 @@ export default function AllEvents() {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.put(
-        `http://localhost:5000/api/v1/event/${eventId}/join`,
+        `${import.meta.env.VITE_SERVER}/api/v1/event/${eventId}/join`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
