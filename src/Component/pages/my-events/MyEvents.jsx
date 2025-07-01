@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import useGetUserData from "../../default/useGetUserData";
+import Swal from "sweetalert2";
 
 export default function AllEvents() {
   const [events, setEvents] = useState([]);
@@ -51,15 +52,31 @@ export default function AllEvents() {
 
   // Handle delete event
   const handleDelete = async (eventId) => {
-    if (!window.confirm("Are you sure you want to delete this event?")) return;
-
     try {
-      const token = localStorage.getItem("accessToken");
-      await axios.delete(`http://localhost:5000/api/v1/event/${eventId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const token = localStorage.getItem("accessToken");
+          axios.delete(`http://localhost:5000/api/v1/event/${eventId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setEvents(events.filter((event) => event._id !== eventId));
+          toast.success("Event deleted successfully!");
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
       });
-      setEvents(events.filter((event) => event._id !== eventId));
-      toast.success("Event deleted successfully!");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete event");
     }
