@@ -185,7 +185,9 @@ export default function AllEvents() {
                 <option value="all">All Events</option>
                 <option value="today">Today</option>
                 <option value="thisweek">This Week</option>
+                <option value="lastweek">Last Week</option>
                 <option value="thismonth">This Month</option>
+                <option value="lastmonth">Last Month</option>
               </select>
             </div>
           </div>
