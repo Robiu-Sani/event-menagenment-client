@@ -14,6 +14,7 @@ import {
 import toast from "react-hot-toast";
 import useGetUserData from "../../default/useGetUserData";
 import Swal from "sweetalert2";
+import EventBanner from "./EventBanner";
 
 export default function AllEvents() {
   const [events, setEvents] = useState([]);
@@ -154,6 +155,7 @@ export default function AllEvents() {
 
   return (
     <div className="container mx-auto p-4">
+      <EventBanner />
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-900">All Events</h1>
         <button

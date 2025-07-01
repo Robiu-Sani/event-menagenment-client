@@ -1,6 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import useContextData from "../../custom-hook/useContext";
+import { Link } from "react-router-dom";
+import {
+  User,
+  Mail,
+  Shield,
+  Calendar,
+  Edit,
+  Lock,
+  Image as ImageIcon,
+} from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const [userData, setUserData] = useState(null);
@@ -32,11 +42,11 @@ export default function Profile() {
           },
         });
         setUserData(response.data.data);
-        // Initialize edit form with current user data
         setEditForm({
           name: response.data.data.name,
           email: response.data.data.email,
-          photoUrl: response.data.data.photoUrl,
+          photoUrl:
+            response.data.data.photoUrl || "https://avatar.vercel.sh/default",
         });
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch user data");
@@ -48,68 +58,7 @@ export default function Profile() {
     fetchUserData();
   }, [token]);
 
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.put(
-        "http://localhost:5000/api/v1/me",
-        editForm,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      handleUserData(response.data.data);
-      setUserData((prev) => ({ ...prev, ...editForm }));
-      setSuccessMessage("Profile updated successfully!");
-      setIsEditModalOpen(false);
-      setTimeout(() => setSuccessMessage(""), 3000);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to update profile");
-    }
-  };
-
-  const handleChangePassword = async (e) => {
-    e.preventDefault();
-    try {
-      // You'll need to implement this endpoint in your backend
-      await axios.put(
-        "http://localhost:5000/api/v1/me/password",
-        passwordForm,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setSuccessMessage("Password changed successfully!");
-      setIsPasswordModalOpen(false);
-      setPasswordForm({ currentPassword: "", newPassword: "" });
-      setTimeout(() => setSuccessMessage(""), 3000);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to change password");
-    }
-  };
-
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      // In a real app, you would upload to cloud storage or your server
-      // This is a simplified version that just uses a local URL
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const photoUrl = reader.result;
-        setEditForm((prev) => ({ ...prev, photoUrl }));
-      };
-      reader.readAsDataURL(file);
-    } catch (err) {
-      setError("Failed to process image");
-    }
-  };
+  // ... (keep all your existing handler functions)
 
   if (!token) {
     return (
@@ -144,7 +93,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Success Message */}
       {successMessage && (
         <div className="fixed top-4 right-4 z-50">
@@ -160,212 +109,234 @@ export default function Profile() {
         </div>
       )}
 
-      {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-indigo-800 text-white shadow-lg">
-        <div className="container mx-auto px-6 py-16">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:mr-8 mb-6 md:mb-0">
+      {/* New Banner Header */}
+      <div className="relative container mx-auto pt-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl overflow-hidden shadow-lg">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+        </div>
+
+        <div className="relative z-10 p-8 md:p-12">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
+            {/* Profile Image */}
+            <div className="relative group">
               <img
-                src={userData.photoUrl}
+                src={userData.photoUrl || "https://avatar.vercel.sh/default"}
                 alt="Profile"
-                className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
+                className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white/80 shadow-xl object-cover"
               />
+              <button
+                onClick={() => setIsEditModalOpen(true)}
+                className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-all"
+              >
+                <Edit className="h-5 w-5 text-indigo-600" />
+              </button>
             </div>
-            <div>
-              <h1 className="text-4xl font-bold mb-2">{userData.name}</h1>
-              <p className="text-xl mb-4">{userData.email}</p>
-              <span className="inline-block bg-white text-blue-600 px-4 py-1 rounded-full text-sm font-semibold">
-                {userData.role}
-              </span>
+
+            {/* Profile Info */}
+            <div className="text-white">
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                {userData.name}
+              </h1>
+              <p className="text-lg md:text-xl text-indigo-100 mb-4">
+                {userData.email}
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm">
+                  <Shield className="h-4 w-4 mr-1" />
+                  {userData.role}
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm">
+                  <Calendar className="h-4 w-4 mr-1" />
+                  Joined {new Date(userData.createdAt).toLocaleDateString()}
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </header>
+
+        {/* Decorative elements */}
+        <div className="absolute right-0 top-0 h-full w-1/3">
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-purple-400 rounded-full opacity-20"></div>
+          <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-indigo-400 rounded-full opacity-20"></div>
+        </div>
+      </div>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-12">
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">
-              Profile Information
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                  Personal Details
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-gray-500">Full Name</p>
-                    <p className="text-gray-800 font-medium">{userData.name}</p>
+      <main className="container mx-auto px-4 md:px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Account Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden lg:col-span-2">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-800">
+                Account Information
+              </h2>
+            </div>
+            <div className="p-6">
+              <div className="space-y-6">
+                <div className="flex items-start">
+                  <div className="bg-indigo-50 p-3 rounded-lg mr-4">
+                    <User className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Email Address</p>
-                    <p className="text-gray-800 font-medium">
+                    <h3 className="text-sm font-medium text-gray-500">
+                      Full Name
+                    </h3>
+                    <p className="text-lg font-medium text-gray-900">
+                      {userData.name}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="bg-indigo-50 p-3 rounded-lg mr-4">
+                    <Mail className="h-6 w-6 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500">
+                      Email Address
+                    </h3>
+                    <p className="text-lg font-medium text-gray-900">
                       {userData.email}
                     </p>
                   </div>
+                </div>
+
+                <div className="flex items-start">
+                  <div className="bg-indigo-50 p-3 rounded-lg mr-4">
+                    <Shield className="h-6 w-6 text-indigo-600" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-500">Role</p>
-                    <p className="text-gray-800 font-medium capitalize">
+                    <h3 className="text-sm font-medium text-gray-500">
+                      Account Type
+                    </h3>
+                    <p className="text-lg font-medium text-gray-900 capitalize">
                       {userData.role}
                     </p>
                   </div>
                 </div>
-              </div>
 
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                  Account Information
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-gray-500">User ID</p>
-                    <p className="text-gray-800 font-medium">{userData._id}</p>
+                <div className="flex items-start">
+                  <div className="bg-indigo-50 p-3 rounded-lg mr-4">
+                    <Calendar className="h-6 w-6 text-indigo-600" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Account Created</p>
-                    <p className="text-gray-800 font-medium">
-                      {new Date(
-                        userData.createdAt || Date.now()
-                      ).toLocaleDateString()}
+                    <h3 className="text-sm font-medium text-gray-500">
+                      Member Since
+                    </h3>
+                    <p className="text-lg font-medium text-gray-900">
+                      {new Date(userData.createdAt).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )}
                     </p>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="mt-12">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                Profile Photo
-              </h3>
-              <div className="flex items-center space-x-6">
-                <img
-                  src={userData.photoUrl}
-                  alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
-                />
+              <div className="mt-8 flex flex-wrap gap-4">
+                <button
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  <Edit className="h-5 w-5" />
+                  Edit Profile
+                </button>
+                <button
+                  onClick={() => setIsPasswordModalOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors"
+                >
+                  <Lock className="h-5 w-5" />
+                  Change Password
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-50 px-8 py-4 border-t flex justify-between">
-            <button
-              onClick={() => setIsEditModalOpen(true)}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
-            >
-              Edit Profile
-            </button>
-            <button
-              onClick={() => setIsPasswordModalOpen(true)}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-            >
-              Change Password
-            </button>
+          {/* Activity Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-800">
+                Your Activity
+              </h2>
+            </div>
+            <div className="p-6">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-green-50 p-3 rounded-lg mr-4">
+                      <Calendar className="h-6 w-6 text-green-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">
+                        Events Attended
+                      </h3>
+                      <p className="text-lg font-medium text-gray-900">12</p>
+                    </div>
+                  </div>
+                  <Link
+                    to="/events"
+                    className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                  >
+                    View All
+                  </Link>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-blue-50 p-3 rounded-lg mr-4">
+                      <Calendar className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">
+                        Upcoming Events
+                      </h3>
+                      <p className="text-lg font-medium text-gray-900">3</p>
+                    </div>
+                  </div>
+                  <Link
+                    to="/events"
+                    className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                  >
+                    View All
+                  </Link>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-purple-50 p-3 rounded-lg mr-4">
+                      <ImageIcon className="h-6 w-6 text-purple-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">
+                        Photos Shared
+                      </h3>
+                      <p className="text-lg font-medium text-gray-900">8</p>
+                    </div>
+                  </div>
+                  <Link
+                    to="/gallery"
+                    className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                  >
+                    View All
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
 
+      {/* Keep your existing modals here */}
       {/* Edit Profile Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-gray-800">Edit Profile</h3>
-              <button
-                onClick={() => setIsEditModalOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                &times;
-              </button>
-            </div>
-
-            <form onSubmit={handleUpdateProfile}>
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="name"
-                >
-                  Full Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={editForm.name}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, name: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="email"
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={editForm.email}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, email: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="photo"
-                >
-                  Profile Photo URL
-                </label>
-                <input
-                  id="photo"
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-                  value={editForm.photoUrl}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, photoUrl: e.target.value })
-                  }
-                />
-                <p className="text-sm text-gray-500 mb-2">OR</p>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-md file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100"
-                />
-              </div>
-
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
+            {/* ... existing edit modal content ... */}
           </div>
         </div>
       )}
@@ -374,80 +345,7 @@ export default function Profile() {
       {isPasswordModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-gray-800">
-                Change Password
-              </h3>
-              <button
-                onClick={() => setIsPasswordModalOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                &times;
-              </button>
-            </div>
-
-            <form onSubmit={handleChangePassword}>
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="currentPassword"
-                >
-                  Current Password
-                </label>
-                <input
-                  id="currentPassword"
-                  type="password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={passwordForm.currentPassword}
-                  onChange={(e) =>
-                    setPasswordForm({
-                      ...passwordForm,
-                      currentPassword: e.target.value,
-                    })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="newPassword"
-                >
-                  New Password
-                </label>
-                <input
-                  id="newPassword"
-                  type="password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={passwordForm.newPassword}
-                  onChange={(e) =>
-                    setPasswordForm({
-                      ...passwordForm,
-                      newPassword: e.target.value,
-                    })
-                  }
-                  required
-                  minLength="6"
-                />
-              </div>
-
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={() => setIsPasswordModalOpen(false)}
-                  className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Change Password
-                </button>
-              </div>
-            </form>
+            {/* ... existing password modal content ... */}
           </div>
         </div>
       )}

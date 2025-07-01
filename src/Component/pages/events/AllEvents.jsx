@@ -24,6 +24,7 @@ export default function AllEvents() {
     search: "",
     date: "",
     category: "all",
+    filter: "all",
   });
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ export default function AllEvents() {
     params.append("page", page);
     if (filters.search) params.append("search", filters.search);
     if (filters.date) params.append("date", filters.date);
+    if (filters.filter !== "all") params.append("filter", filters.filter);
     if (filters.category !== "all") params.append("category", filters.category);
     return params.toString();
   };
@@ -103,6 +105,7 @@ export default function AllEvents() {
       search: "",
       date: "",
       category: "all",
+      filter: "all",
     });
     setPage(1);
   };
@@ -129,7 +132,7 @@ export default function AllEvents() {
   return (
     <div className="container mx-auto p-4">
       {/* Search and Filter Section */}
-      <div className="bg-white shadow-sm rounded-lg p-6 mb-8">
+      <div className="bg-white shadow-sm rounded-lg px-6 mb-8">
         <div className="flex flex-col md:flex-row gap-4 items-end">
           {/* Search Field */}
           <div className="flex-1 w-full">
@@ -156,7 +159,7 @@ export default function AllEvents() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Date
             </label>
-            <div className="relative">
+            <div className="relative hidden">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <CalendarDays className="h-4 w-4 text-gray-400" />
               </div>
@@ -167,6 +170,22 @@ export default function AllEvents() {
                 onChange={handleFilterChange}
                 className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
               />
+            </div>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Filter className="h-4 w-4 text-gray-400" />
+              </div>
+              <select
+                name="filter"
+                value={filters.filter}
+                onChange={handleFilterChange}
+                className="pl-10 pr-8 py-2 border rounded-lg appearance-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">All Events</option>
+                <option value="today">Today</option>
+                <option value="thisweek">This Week</option>
+                <option value="thismonth">This Month</option>
+              </select>
             </div>
           </div>
 

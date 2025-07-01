@@ -1,7 +1,10 @@
 // components/EventCard.jsx
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
+import useGetUserData from "../../default/useGetUserData";
 
 export default function EventCard({ event, onJoin }) {
+  const { userData } = useGetUserData();
+  const isJoined = event.attendees?.includes(userData?.email);
   return (
     <div className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-white">
       <div className="p-6">
@@ -50,12 +53,21 @@ export default function EventCard({ event, onJoin }) {
             <Users className="h-4 w-4" />
             <span>{event.attendeeCount} attending</span>
           </div>
-          <button
-            onClick={() => onJoin(event._id)}
-            className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
-          >
-            Join
-          </button>
+          {isJoined ? (
+            <button
+              disabled
+              className="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg cursor-not-allowed"
+            >
+              Joined
+            </button>
+          ) : (
+            <button
+              onClick={() => onJoin(event._id)}
+              className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-medium"
+            >
+              Join
+            </button>
+          )}
         </div>
       </div>
     </div>

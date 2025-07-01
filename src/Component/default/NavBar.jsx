@@ -2,6 +2,7 @@ import { Home, CalendarPlus, Calendar, LogIn } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import useGetUserData from "./useGetUserData";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 const NavBar = () => {
   const [callBox, setCallBox] = useState(false);
@@ -9,10 +10,28 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    refetch();
-    window.location.reload();
-    navigate("/login");
+    setCallBox(false);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Are You Really Wanot To Logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, logout!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("accessToken");
+        refetch();
+        window.location.reload();
+        navigate("/login");
+        Swal.fire({
+          title: "Logged Out!",
+          text: "You have been logged out successfully.",
+          icon: "success",
+        });
+      }
+    });
   };
 
   return (
@@ -81,6 +100,7 @@ const NavBar = () => {
                     {userData.name}
                   </div>
                   <Link
+                    onClick={() => setCallBox(false)}
                     to={`/profile`}
                     className="p-2 border text-sm text-center bg-gray-50 rounded-md"
                   >
@@ -136,7 +156,40 @@ const NavBar = () => {
           </svg>
         </button>
         {userData ? (
-          ""
+          <div className="h-auto relative flex items-center">
+            <div
+              onClick={() => setCallBox(!callBox)}
+              className="w-[50px] cursor-pointer h-[50px] flex justify-center items-center rounded-full border-2 overflow-hidden"
+            >
+              <img
+                src={
+                  userData.photoUrl ||
+                  "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+                }
+                className="max-h-full max-w-full"
+              />
+            </div>
+            {callBox && (
+              <div className="absolute top-[55px] flex flex-col gap-2 right-0 w-[250px] bg-white rounded-md border p-3">
+                <div className="p-2 text-sm text-center bg-gray-50 rounded-md">
+                  {userData.name}
+                </div>
+                <Link
+                  onClick={() => setCallBox(false)}
+                  to={`/profile`}
+                  className="p-2 border text-sm text-center bg-gray-50 rounded-md"
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="p-2 border text-sm font-bold text-center bg-red-100 rounded-md"
+                >
+                  LogOut
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <Link
             to="/login"

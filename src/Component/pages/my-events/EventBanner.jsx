@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
-export default function EventsBanner() {
+export default function EventBanner() {
   return (
-    <div className="relative container mx-auto mt-4 mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl overflow-hidden shadow-lg">
+    <div className="relative mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl overflow-hidden shadow-lg">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
@@ -23,10 +23,10 @@ export default function EventsBanner() {
 
           {/* CTA button */}
           <Link
-            to={"/my-events"}
+            to={"/events"}
             className="bg-white  text-indigo-600 hover:bg-indigo-50 px-6 py-3 rounded-lg font-medium transition-all transform hover:scale-105 shadow-md"
           >
-            Browse Your Events
+            Browse All Events
           </Link>
         </div>
       </div>
